@@ -8,9 +8,25 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/boost.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <style>
+        /* Ensure the html and body take up the full height */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Make the container take the full height */
+        #container {
+            width: 100%;
+            height: 100%; /* Adjusted to full height */
+        }
+    </style>
 </head>
 <body>
-    <div id="container" style="width: 100%; height: 90%;"><script src="script.js"></script></div>
-    
+    <div id="container"></div>
+    <!-- Include your script after the container -->
+    <script src="script.js"></script>
 </body>
 </html>
