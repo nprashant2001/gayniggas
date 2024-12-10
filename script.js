@@ -1,6 +1,6 @@
 // Fetch the JSON data and create the chart
 async function getData() {
-    const response = await fetch('./largefile.json'); // Adjust the path if necessary
+    const response = await fetch('./100k_doesnotwork.json'); // Adjust the path if necessary
     return await response.json();
 }
 
@@ -8,6 +8,15 @@ getData().then(data => {
     // Convert the JSON object into an array
     const dataArray = Object.values(data);
     console.log(dataArray);
+
+    // Calculate global min and max for X and Y axes
+    const xValues = dataArray.map(elm => elm.UMAP1);
+    const yValues = dataArray.map(elm => elm.UMAP2);
+
+    const xMin = Math.min(...xValues);
+    const xMax = Math.max(...xValues);
+    const yMin = Math.min(...yValues);
+    const yMax = Math.max(...yValues);
 
     // Group data by cluster
     const clusters = {};
@@ -19,6 +28,7 @@ getData().then(data => {
     });
 
     console.log(clusters);
+
     // Generate series dynamically
     const series = Object.keys(clusters).map((cluster, index) => ({
         name: `Cluster ${cluster}`,
@@ -29,15 +39,7 @@ getData().then(data => {
         }
     }));
 
-    // Dynamically generate colors
-    const colors = series.map((_, index) =>
-        `hsl(${(index * 360) / series.length}, 100%, 50%)`
-    );
-
-    Highcharts.setOptions({
-        colors: colors
-    });
-
+    // Create the Highcharts scatter plot
     Highcharts.chart('container', {
         chart: {
             type: 'scatter',
@@ -57,6 +59,8 @@ getData().then(data => {
             title: {
                 text: 'UMAP1'
             },
+            min: xMin - 1, // Add padding for better visualization
+            max: xMax + 1,
             gridLineWidth: 0,
             labels: {
                 enabled: false
@@ -68,6 +72,8 @@ getData().then(data => {
             title: {
                 text: 'UMAP2'
             },
+            min: yMin - 1,
+            max: yMax + 1,
             gridLineWidth: 0,
             labels: {
                 enabled: false
